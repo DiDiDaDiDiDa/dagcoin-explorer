@@ -56,6 +56,64 @@ function getLastUnits(cb) {
 	});
 }
 
+function getUnitsByRowid(rowid, beforeLimit, afterLimit, cb) {
+	var nodes = [];
+	var edges = {};
+	var units = [];
+
+	db.query(
+        "SELECT * FROM (SELECT u.rowid, u.*\
+        FROM units u\
+        WHERE\
+        unit IN(\
+            SELECT distinct unit\
+            FROM inputs\
+            WHERE asset = ?)\
+        AND ROWID < ?\
+        UNION ALL SELECT rowid, * FROM units WHERE unit = ?\
+        ORDER BY ROWID DESC LIMIT 0, ?)\
+        \
+        UNION ALL\
+        \
+        SELECT * FROM (SELECT u.rowid, u.*\
+        FROM units u\
+        WHERE\
+        unit IN(\
+            SELECT distinct unit\
+            FROM inputs\
+            WHERE asset = ?)\
+        AND ROWID >= ?\
+        ORDER BY ROWID LIMIT 0, ?)\
+        ORDER BY ROWID DESC",
+        [DAGCOIN_ASSET, rowid, DAGCOIN_ASSET, beforeLimit, DAGCOIN_ASSET, rowid, afterLimit], function (rows) {
+			rows.forEach(function (row, index, array) {
+				nodes.push({
+					data: { unit: row.unit, unit_s: row.unit.substr(0, 7) + '...' },
+					rowid: row.rowid,
+					is_on_main_chain: row.is_on_main_chain,
+					is_stable: row.is_stable,
+					sequence: row.sequence
+				});
+
+				if (index + 1 < array.length) {
+
+					var child_node = array[index + 1];
+
+					edges[child_node.unit + '_' + row.unit] = {
+						data: {
+							source: row.unit,
+							target: child_node.unit
+						},
+						best_parent_unit: child_node.unit == row.best_parent_unit
+					};
+				}
+			});
+
+			cb(nodes, edges);
+		}
+	);
+}
+
 function getUnitsBeforeRowid(rowid, limit, cb) {
 	var nodes = [];
 	var edges = {};
@@ -357,6 +415,7 @@ function getUnitsThatBecameStable(arrUnits, cb) {
 }
 
 exports.getLastUnits = getLastUnits;
+exports.getUnitsByRowid = getUnitsByRowid;
 exports.getUnitsBeforeRowid = getUnitsBeforeRowid;
 exports.getUnitsAfterRowid = getUnitsAfterRowid;
 exports.getInfoOnUnit = getInfoOnUnit;
