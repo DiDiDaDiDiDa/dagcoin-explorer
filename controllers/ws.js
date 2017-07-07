@@ -28,7 +28,7 @@ function start(data) {
 				});
 			}
 			else {
-				units.getUnitsBeforeRowid(row[0].rowid + 25, 100, function(nodes, edges) {
+                units.getUnitsByRowid(row[0].rowid, 75, 25, function(nodes, edges) {
 					ws.emit('start', {
 						nodes: nodes,
 						edges: edges
@@ -141,7 +141,7 @@ function highlightNode(data) {
 				});
 			}
 			else {
-				units.getUnitsBeforeRowid(rowid + 25, 100, function(nodes, edges) {
+                units.getUnitsByRowid(rowid, 75, 25, function(nodes, edges) {
 					ws.emit('start', {
 						nodes: nodes,
 						edges: edges
