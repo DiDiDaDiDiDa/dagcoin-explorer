@@ -653,9 +653,10 @@ socket.on('start', function(data) {
 socket.on('next', function(data) {
 	if (notLastUnitDown) {
 		if (bWaitingForHighlightNode) bWaitingForHighlightNode = false;
-		nodes = nodes.concat(data.nodes);
+
+        nodes = nodes.concat(data.nodes);
 		for (var k in data.edges) {
-			if (data.edges.hasOwnProperty(k)) {
+            if (data.edges.hasOwnProperty(k) && !edges.hasOwnProperty(k)) {
 				edges[k] = data.edges[k];
 			}
 		}
@@ -675,14 +676,23 @@ socket.on('next', function(data) {
 
 socket.on('prev', function(data) {
 	if (bWaitingForHighlightNode) bWaitingForHighlightNode = false;
-	if (data.nodes.length) {
+    if (data.nodes.length) {
+	    firstUnit = data.nodes[0].rowid;
+
+	    for (var i = 0; i < nodes.length; i++) {
+		    for (var j = data.nodes.length - 1; j >= 0; j--) {
+			    if (nodes[i].rowid === data.nodes[j].rowid) {
+				    data.nodes.splice(j, 1);
+			    }
+		    }
+	    }
+
 		nodes = [].concat(data.nodes, nodes);
 		for (var k in data.edges) {
-			if (data.edges.hasOwnProperty(k)) {
+            if (data.edges.hasOwnProperty(k) && !edges.hasOwnProperty(k)) {
 				edges[k] = data.edges[k];
 			}
 		}
-		firstUnit = data.nodes[0].rowid;
 		setNew(data.nodes, data.edges);
 	}
 	bWaitingForPrev = false;
@@ -848,7 +858,7 @@ socket.on('new', function(data) {
 	if (data.nodes.length) {
 		nodes = [].concat(data.nodes, nodes);
 		for (var k in data.edges) {
-			if (data.edges.hasOwnProperty(k)) {
+            if (data.edges.hasOwnProperty(k) && !edges.hasOwnProperty(k)) {
 				edges[k] = data.edges[k];
 			}
 		}

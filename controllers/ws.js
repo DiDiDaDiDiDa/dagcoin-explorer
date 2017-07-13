@@ -67,7 +67,7 @@ function next(data) {
 	var ws = this;
 
 	units.getUnitsThatBecameStable(data.notStable, function(arrStableUnits) {
-		units.getUnitsBeforeRowid(data.last, 100, function(nodes, edges) {
+        units.getUnitsByRowid(data.last, 100, 1, function(nodes, edges) {
 			ws.emit('next', {
 				nodes: nodes,
 				edges: edges,
@@ -81,7 +81,7 @@ function prev(data) {
 	var ws = this;
 
 	units.getUnitsThatBecameStable(data.notStable, function(arrStableUnits) {
-		units.getUnitsAfterRowid(data.first, 100, function(nodes, edges) {
+        units.getUnitsByRowid(data.first, 1, 100, function(nodes, edges) {
 			ws.emit('prev', {
 				nodes: nodes,
 				edges: edges,
@@ -96,7 +96,7 @@ function newUnits(data) {
 	var ws = this;
 
 	units.getUnitsThatBecameStable(data.notStable, function(arrStableUnits) {
-		units.getUnitsAfterRowid(data.unit, 100, function(nodes, edges) {
+        units.getUnitsByRowid(data.unit, 1, 100, function(nodes, edges) {
 			ws.emit('new', {
 				nodes: nodes,
 				edges: edges,
@@ -124,7 +124,7 @@ function highlightNode(data) {
 		if (row.length) {
 			var rowid = row[0].rowid;
 			if (rowid > data.first && rowid < data.first + 200) {
-				units.getUnitsAfterRowid(data.first, 200, function(nodes, edges) {
+                units.getUnitsByRowid(data.first, 1, 200, function(nodes, edges) {
 					ws.emit('prev', {
 						nodes: nodes,
 						edges: edges,
@@ -133,7 +133,7 @@ function highlightNode(data) {
 				});
 			}
 			else if (rowid < data.last && rowid > data.last - 200) {
-				units.getUnitsBeforeRowid(data.last, 200, function(nodes, edges) {
+                units.getUnitsByRowid(data.last, 200, 1, function(nodes, edges) {
 					ws.emit('next', {
 						nodes: nodes,
 						edges: edges

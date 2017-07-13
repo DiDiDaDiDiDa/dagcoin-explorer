@@ -114,113 +114,6 @@ function getUnitsByRowid(rowid, beforeLimit, afterLimit, cb) {
 	);
 }
 
-function getUnitsBeforeRowid(rowid, limit, cb) {
-	var nodes = [];
-	var edges = {};
-	var units = [];
-
-    db.query(
-		"SELECT u.rowid, u.*\
-		FROM units u\
-		WHERE\
-			unit IN(\
-			SELECT distinct unit\
-			FROM inputs\
-			WHERE asset = ?)\
-		AND ROWID < ?\
-		UNION ALL select rowid, * FROM units WHERE unit = ?\
-		ORDER BY ROWID DESC LIMIT 0, ?",
-        [DAGCOIN_ASSET, rowid, DAGCOIN_ASSET, limit],function(rows) {
-            rows.forEach(function(row, index, array) {
-                nodes.push({
-                    data: {unit: row.unit, unit_s: row.unit.substr(0, 7) + '...'},
-                    rowid: row.rowid,
-                    is_on_main_chain: row.is_on_main_chain,
-                    is_stable: row.is_stable,
-                    sequence: row.sequence
-                });
-
-                if(index + 1< array.length) {
-
-                    var child_node = array[index + 1];
-
-                    edges[child_node.unit + '_' + row.unit] = {
-                        data: {
-                            source: row.unit,
-                            target: child_node.unit
-                        },
-                        best_parent_unit: child_node.unit == row.best_parent_unit
-                    };
-                }
-            });
-
-            cb(nodes, edges);
-		}
-	);
-}
-
-function getUnitsAfterRowid(rowid, limit, cb) {
-	var nodes = [];
-	var edges = {};
-	var units = [];
-
-    db.query(
-    	"SELECT unit FROM units WHERE rowid = ?", [rowid], function (querying_units) {
-    		if(querying_units.length != 1) {
-    			console.error("Expected a specific unit for this request");
-    			return;
-			}
-
-			var querying_unit = querying_units[0].unit;
-
-			db.query(
-				"SELECT u.rowid, u.*\
-				FROM units u\
-				WHERE\
-					unit IN(\
-					SELECT distinct unit\
-					FROM inputs\
-					WHERE asset = ?)\
-				AND ROWID > ?\
-				ORDER BY ROWID DESC LIMIT 0, ?",
-				[DAGCOIN_ASSET, rowid, limit],function(rows) {
-					rows.forEach(function(row, index, array) {
-						nodes.push({
-							data: {unit: row.unit, unit_s: row.unit.substr(0, 7) + '...'},
-							rowid: row.rowid,
-							is_on_main_chain: row.is_on_main_chain,
-							is_stable: row.is_stable,
-							sequence: row.sequence
-						});
-
-						if(index + 1< array.length) {
-							var child_node = array[index + 1];
-
-							edges[child_node.unit + '_' + row.unit] = {
-								data: {
-									source: row.unit,
-									target: child_node.unit
-								},
-								best_parent_unit: child_node.unit == row.best_parent_unit
-							};
-						} else {
-                            edges[querying_unit + '_' + row.unit] = {
-                                data: {
-                                    source: row.unit,
-                                    target: querying_unit
-                                },
-                                best_parent_unit: querying_unit == row.best_parent_unit
-                            };
-						}
-					});
-
-					cb(nodes, edges);
-				}
-			)
-    	}
-	);
-}
-
 function getParentsAndChildren(unit, cb) {
 	var parents = [];
 	var children = [];
@@ -416,7 +309,5 @@ function getUnitsThatBecameStable(arrUnits, cb) {
 
 exports.getLastUnits = getLastUnits;
 exports.getUnitsByRowid = getUnitsByRowid;
-exports.getUnitsBeforeRowid = getUnitsBeforeRowid;
-exports.getUnitsAfterRowid = getUnitsAfterRowid;
 exports.getInfoOnUnit = getInfoOnUnit;
 exports.getUnitsThatBecameStable = getUnitsThatBecameStable;
