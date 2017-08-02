@@ -1,0 +1,10 @@
+[{
+  "name"      : "dagcoin-explorer-test",
+  "script"    : "npm start",
+  "cwd"       : "/home/ignite/dagcoin-explorer-test/current",
+  "exec_mode" : "cluster",
+  "pid_file"  : "/home/ignite/.pm2/pids/dagcoin-explorer-test.pid",
+  "watch"     : true,
+  "autorestart" : true,
+  "instances" : 1
+}]
