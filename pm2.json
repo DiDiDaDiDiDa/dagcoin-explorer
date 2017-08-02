@@ -1,6 +1,6 @@
 [{
   "name"      : "dagcoin-explorer-test",
-  "script"    : "npm start",
+  "script"    : "explorer.js",
   "cwd"       : "/home/ignite/dagcoin-explorer-test/current",
   "exec_mode" : "cluster",
   "pid_file"  : "/home/ignite/.pm2/pids/dagcoin-explorer-test.pid",
