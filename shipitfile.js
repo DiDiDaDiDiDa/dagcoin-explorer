@@ -8,8 +8,8 @@ module.exports = (shipit) => {
 
   shipit.initConfig({
     default: {
-      workspace: '/tmp/dagcoin-explorer-test',
-      deployTo: '/home/ignite/dagcoin-explorer-test',
+      workspace: '/tmp/dagcoin-explorer',
+      deployTo: '/home/ignite/dagcoin-explorer',
       repositoryUrl: 'git@github.com:dagcoin/dagcoin-explorer.git',
       ignores: ['.git', 'node_modules'],
       branch: 'shipit',
@@ -17,7 +17,7 @@ module.exports = (shipit) => {
       deleteOnRollback: false,
       shallowClone: true,
       pm2: {
-        json: '/home/ignite/dagcoin-explorer-test/current/pm2.json'
+        json: '/home/ignite/dagcoin-explorer/current/pm2.json'
       },
       shared: {
         overwrite: true,
