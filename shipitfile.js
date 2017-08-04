@@ -32,7 +32,7 @@ module.exports = (shipit) => {
     production: {
       branch: 'shipit',
       servers: [
-        'ignite@194.204.60.69'
+        'ignite@dagcoin-testnet'
       ]
     }
   });
