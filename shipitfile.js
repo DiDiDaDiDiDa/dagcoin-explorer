@@ -1,5 +1,5 @@
 const path = require('path');
-
+const exec = require('child_process').exec;
 module.exports = (shipit) => {
   require('shipit-deploy')(shipit);
   require('shipit-shared')(shipit);
@@ -29,7 +29,7 @@ module.exports = (shipit) => {
         ]
       }
     },
-    production: {
+    testnet: {
       branch: 'shipit',
       servers: [
         'ignite@dagcoin-testnet'
@@ -41,4 +41,15 @@ module.exports = (shipit) => {
     const target = path.join(shipit.config.deployTo, 'current');
     return shipit.remote(`cd ${target} && pm2 save`);
   });
+
+  shipit.on('updated', () => {
+    return exec('sh testnetify.sh', (error, stdout, stderr) => {
+      console.log(`${stdout}`);
+      console.log(`${stderr}`);
+      if (error !== null) {
+        console.log(`exec error: ${error}`);
+        process.exit(1);
+      }
+    });
+  })
 };
