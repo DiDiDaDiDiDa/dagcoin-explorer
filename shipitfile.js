@@ -42,7 +42,10 @@ module.exports = (shipit) => {
     return shipit.remote(`cd ${target} && pm2 save`);
   });
 
-  shipit.on('updated', () => {
+  shipit.on('npm_installed', () => {
+    if (!process.env.NODE_ENV === 'testnet') {
+      return;
+    }
     return exec('sh testnetify.sh', (error, stdout, stderr) => {
       console.log(`${stdout}`);
       console.log(`${stderr}`);
