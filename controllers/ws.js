@@ -96,7 +96,12 @@ function newUnits(data) {
 	var ws = this;
 
 	units.getUnitsThatBecameStable(data.notStable, function(arrStableUnits) {
-        units.getUnitsByRowid(data.unit, 1, 100, function(nodes, edges) {
+        units.getUnitsByRowid(data.unit, 0, 100, function(nodes, edges) {
+            if (nodes.length === 1) { // received byteball unit
+                nodes = [];
+                edges = [];
+			}
+
 			ws.emit('new', {
 				nodes: nodes,
 				edges: edges,
