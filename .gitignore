@@ -1,0 +1,17 @@
+pids
+logs
+results
+
+node_modules
+npm-debug.log
+build/archive
+coverage/*
+
+
+.DS_Store
+
+uploads/*
+log/*
+.env
+
+.idea
