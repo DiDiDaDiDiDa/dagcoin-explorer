@@ -10,7 +10,7 @@ module.exports = (shipit) => {
     default: {
       workspace: '/tmp/dagcoin-explorer',
       deployTo: '/home/ignite/dagcoin-explorer',
-      repositoryUrl: 'git@github.com:dagcoin/dagcoin-explorer.git',
+      repositoryUrl: 'https://github.com/dagcoin/dagcoin-explorer.git',
       ignores: ['.git', 'node_modules'],
       branch: 'shipit',
       keepReleases: 3,
@@ -30,7 +30,7 @@ module.exports = (shipit) => {
       }
     },
     testnet: {
-      branch: 'shipit',
+      branch: 'master',
       servers: [
         'ignite@dagcoin-testnet'
       ]

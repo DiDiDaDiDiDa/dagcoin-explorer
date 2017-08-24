@@ -1,11 +1,12 @@
 {
-  "name": "byteball-explorer",
-  "description": "Byteball explorer",
-  "author": "Byteball",
+  "name": "dagcoin-explorer",
+  "description": "Dagcoin explorer",
+  "author": "Dagcoin",
   "version": "0.1.0",
   "main": "start.js",
   "keywords": [
     "explorer",
+    "dagcoin",
     "byteball",
     "full node"
   ],
@@ -15,11 +16,11 @@
   },
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/byteball/byteball-explorer.git",
+    "url": "git://github.com/dagcoin/dagcoin-explorer.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/byteball/byteball-explorer/issues"
+    "url": "https://github.com/dagcoin/dagcoin-explorer/issues"
   },
   "browser": {
     "request": "browser-request",
