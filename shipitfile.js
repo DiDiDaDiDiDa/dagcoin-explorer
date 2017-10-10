@@ -1,5 +1,4 @@
 const path = require('path');
-const exec = require('child_process').exec;
 module.exports = (shipit) => {
   require('shipit-deploy')(shipit);
   require('shipit-shared')(shipit);
@@ -12,7 +11,7 @@ module.exports = (shipit) => {
       deployTo: '/home/ignite/dagcoin-explorer',
       repositoryUrl: 'https://github.com/dagcoin/dagcoin-explorer.git',
       ignores: ['.git', 'node_modules'],
-      branch: 'shipit',
+      branch: 'master',
       keepReleases: 3,
       deleteOnRollback: false,
       shallowClone: true,
@@ -43,16 +42,14 @@ module.exports = (shipit) => {
   });
 
   shipit.on('npm_installed', () => {
+    const target = path.join(shipit.config.deployTo, 'current');
     if (!process.env.NODE_ENV === 'testnet') {
       return;
     }
-    return exec('sh testnetify.sh', (error, stdout, stderr) => {
-      console.log(`${stdout}`);
-      console.log(`${stderr}`);
-      if (error !== null) {
-        console.log(`exec error: ${error}`);
-        process.exit(1);
-      }
-    });
+    return shipit.remote(`cd ${target} && sh testnetify.sh`)
+      .then(res => {
+        console.log(res[0].stdout);
+        console.log(res[0].stderr)
+      });
   })
 };

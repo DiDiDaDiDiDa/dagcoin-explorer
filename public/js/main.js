@@ -27,7 +27,7 @@ function init(_nodes, _edges) {
 	createCy();
 	generate(_nodes, _edges);
 	oldOffset = _cy.getElementById(nodes[0].data.unit).position().y + 66;
-	_cy.viewport({zoom: 1.01});
+	_cy.viewport({zoom: 1.00});
 	_cy.center(_cy.nodes()[0]);
 	page = 'dag';
 
@@ -599,6 +599,10 @@ function goToTop() {
 	$('#listInfo').hide();
 }
 
+function resetViewport(){
+  _cy.viewport({zoom: 1.00});
+}
+
 //events
 window.addEventListener('hashchange', function() {
 	if (location.hash.length == 45) {
@@ -671,6 +675,7 @@ socket.on('next', function(data) {
 			notLastUnitDown = false;
 		}
 		setChangesStableUnits(data.arrStableUnits);
+		resetViewport();
 	}
 });
 
@@ -704,6 +709,7 @@ socket.on('prev', function(data) {
 		waitGo = false;
 	}
 	setChangesStableUnits(data.arrStableUnits);
+	resetViewport();
 });
 
 function generateMessageInfo(messages, transfersInfo, outputsUnit, assocCommissions) {
