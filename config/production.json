@@ -20,5 +20,6 @@
   ],
   "initial_peers": [
     "wss://byteball.org/bb"
-  ]
+  ],
+  "DAGCOIN_ASSET": "j5brqzPhQ0H2VNYi3i59PmlV15p54yAiSzacrQ2KqQQ="
 }

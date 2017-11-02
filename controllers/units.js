@@ -5,12 +5,8 @@ var db = require('byteballcore/db.js');
 var storage = require('byteballcore/storage.js');
 var moment = require('moment');
 var async = require('async');
-//LIVENET
-//var DAGCOIN_ASSET= "j5brqzPhQ0H2VNYi3i59PmlV15p54yAiSzacrQ2KqQQ=";
-//TESTNET old
-//var DAGCOIN_ASSET = "xAGoGIhDI40hV7oDmDykM3K0/LfwUjpo6WhpzqAXCr0=";
-//TESTNET new
-var DAGCOIN_ASSET = "B9dw3C3gMC+AODL/XqWjFh9jFe31jS08yf2C3zl8XGg=";
+var conf = require('byteballcore/conf.js');
+
 
 function getLastUnits(cb) {
 	var nodes = [];
@@ -28,7 +24,7 @@ function getLastUnits(cb) {
 		 WHERE unit = ?\
     	 ORDER BY creation_date desc\
     	 LIMIT 100;",
-		[DAGCOIN_ASSET, DAGCOIN_ASSET],function(rows) {
+		[conf.DAGCOIN_ASSET, conf.DAGCOIN_ASSET],function(rows) {
         rows.forEach(function(row, index, array) {
             nodes.push({
                 data: {unit: row.unit, unit_s: row.unit.substr(0, 7) + '...'},
@@ -85,7 +81,7 @@ function getUnitsByRowid(rowid, beforeLimit, afterLimit, cb) {
         AND ROWID >= ?\
         ORDER BY ROWID LIMIT 0, ?)\
         ORDER BY ROWID DESC",
-        [DAGCOIN_ASSET, rowid, DAGCOIN_ASSET, beforeLimit, DAGCOIN_ASSET, rowid, afterLimit], function (rows) {
+        [conf.DAGCOIN_ASSET, rowid, conf.DAGCOIN_ASSET, beforeLimit, conf.DAGCOIN_ASSET, rowid, afterLimit], function (rows) {
 			rows.forEach(function (row, index, array) {
 				nodes.push({
 					data: { unit: row.unit, unit_s: row.unit.substr(0, 7) + '...' },
