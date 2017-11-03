@@ -1,4 +1,6 @@
 {
+  "env": "testnet",
+  "sentryUrl" : "https://b3b3bd4dd2c8445db12a30982e0b2a2a:193bfae010ef41b3b4475591df6bacb6@sentry.io/239489",
   "port": null,
   "bServeAsHub": false,
   "bLight": false,

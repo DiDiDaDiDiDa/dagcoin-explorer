@@ -8,6 +8,14 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var ws = require('./controllers/ws');
+var Raven = require('raven');
+
+if (conf.sentryUrl) {
+	Raven.config(conf.sentryUrl, {
+		environment: conf.env
+	}).install();
+}
+
 
 app.use(express.static(__dirname + '/public'));
 
